@@ -3,7 +3,7 @@ import { Environment, Lightformer, ContactShadows, OrbitControls } from '@react-
 import { Effects } from './Effects'
 import { Lamborghini } from './Lamborghini'
 
-export default function App() {
+export default function Scene() {
   return (
     <Canvas gl={{ logarithmicDepthBuffer: true, antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 15], fov: 25 }}>
       <color attach="background" args={['#15151a']} />

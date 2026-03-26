@@ -1,6 +1,8 @@
 import { lazy, Suspense, useState } from 'react'
 import { Leva } from 'leva'
 
+type SceneKey = keyof typeof scenes
+
 const scenes = {
   'lambo-envmaps': { name: 'Lambo EnvMaps', component: lazy(() => import('./scenes/lambo-envmaps')) },
   'porsche-live-envmaps': { name: 'Porsche Live EnvMaps', component: lazy(() => import('./scenes/porsche-live-envmaps')) },
@@ -9,18 +11,18 @@ const scenes = {
   'env-transitions': { name: 'Env Transitions', component: lazy(() => import('./scenes/env-transitions')) },
   'viewcube': { name: 'ViewCube HUD', component: lazy(() => import('./scenes/viewcube')) },
   'gltf-reuse': { name: 'GLTF Reuse', component: lazy(() => import('./scenes/gltf-reuse')) },
-}
+} as const
 
 export default function App() {
-  const [active, setActive] = useState(null)
+  const [active, setActive] = useState<SceneKey | null>(null)
   const Scene = active ? scenes[active].component : null
 
-  if (active) {
+  if (active && Scene) {
     return (
       <>
         <Leva collapsed />
         <button className="back-button" onClick={() => setActive(null)}>
-          ← Back
+          &larr; Back
         </button>
         <Suspense fallback={<div className="loading">Loading...</div>}>
           <Scene key={active} />
@@ -35,7 +37,7 @@ export default function App() {
       <div className="selector">
         <h1>R3F Examples</h1>
         <div className="grid">
-          {Object.entries(scenes).map(([key, { name }]) => (
+          {(Object.entries(scenes) as [SceneKey, (typeof scenes)[SceneKey]][]).map(([key, { name }]) => (
             <button key={key} className="card" onClick={() => setActive(key)}>
               {name}
             </button>

@@ -26,7 +26,7 @@ export default function Scene() {
   )
 }
 
-function Tone({ mapping, exposure }) {
+function Tone({ mapping, exposure }: { mapping: string; exposure: number }): null {
   const gl = useThree((state) => state.gl)
   useEffect(() => {
     const prevFrag = THREE.ShaderChunk.tonemapping_pars_fragment
@@ -50,12 +50,14 @@ function Tone({ mapping, exposure }) {
          return mix(color, vec3(1, 1, 1), g);
        }`,
     )
-    gl.toneMapping = THREE[mapping + 'ToneMapping']
+    const toneKey = mapping + 'ToneMapping' as keyof typeof THREE
+    gl.toneMapping = (THREE[toneKey] as THREE.ToneMapping) ?? THREE.NoToneMapping
     gl.toneMappingExposure = exposure
     return () => {
       gl.toneMapping = prevTonemapping
       gl.toneMappingExposure = prevTonemappingExp
       THREE.ShaderChunk.tonemapping_pars_fragment = prevFrag
     }
-  }, [mapping, exposure])
+  }, [gl, mapping, exposure])
+  return null
 }

@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
-import { Suspense } from 'react'
-import { Stats } from '@react-three/drei'
+import { useEffect, Suspense } from 'react'
 import Scene from './Scene'
 
 export default function LamboEnvmaps() {
@@ -11,7 +9,6 @@ export default function LamboEnvmaps() {
   return (
     <Suspense fallback={null}>
       <Scene />
-      <Stats />
     </Suspense>
   )
 }

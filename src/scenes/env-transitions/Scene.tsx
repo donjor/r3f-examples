@@ -3,6 +3,9 @@ import { useControls } from 'leva'
 import { Canvas } from '@react-three/fiber'
 import { AccumulativeShadows, RandomizedLight, Center, Environment, OrbitControls } from '@react-three/drei'
 
+const PRESETS = ['sunset', 'dawn', 'night', 'warehouse', 'forest', 'apartment', 'studio', 'city', 'park', 'lobby'] as const
+type PresetName = (typeof PRESETS)[number]
+
 export default function Scene() {
   return (
     <Canvas shadows camera={{ position: [0, 0, 4.5], fov: 50 }}>
@@ -31,14 +34,14 @@ function Sphere() {
 }
 
 function Env() {
-  const [preset, setPreset] = useState('sunset')
-  const [inTransition, startTransition] = useTransition()
+  const [preset, setPreset] = useState<PresetName>('sunset')
+  const [, startTransition] = useTransition()
   const { blur } = useControls({
     blur: { value: 0.65, min: 0, max: 1 },
     preset: {
-      value: preset,
-      options: ['sunset', 'dawn', 'night', 'warehouse', 'forest', 'apartment', 'studio', 'city', 'park', 'lobby'],
-      onChange: (value) => startTransition(() => setPreset(value))
+      value: preset as string,
+      options: PRESETS as unknown as string[],
+      onChange: (value: string) => startTransition(() => setPreset(value as PresetName))
     }
   })
   return <Environment preset={preset} background blur={blur} />
