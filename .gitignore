@@ -6,3 +6,4 @@ dist/
 *.log
 *.lockb
 .DS_Store
+public/models/
