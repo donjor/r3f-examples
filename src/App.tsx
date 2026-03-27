@@ -8,6 +8,7 @@ import Gallery from '@/components/Gallery'
 const sceneComponents = {
   'lambo-envmaps': lazy(() => import('./scenes/lambo-envmaps')),
   'porsche-live-envmaps': lazy(() => import('./scenes/porsche-live-envmaps')),
+  'porsche-showcase': lazy(() => import('./scenes/porsche-showcase')),
   'porsche-ground-projection': lazy(() => import('./scenes/porsche-ground-projection')),
   'datsun-ssgi': lazy(() => import('./scenes/datsun-ssgi')),
   'env-transitions': lazy(() => import('./scenes/env-transitions')),

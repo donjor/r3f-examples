@@ -65,6 +65,16 @@ const scenes: SceneInfo[] = [
     accent: '#818cf8',
   },
   {
+    key: 'porsche-showcase',
+    name: 'Porsche 911',
+    subtitle: 'Showcase & Freeform',
+    desc: 'Dual camera modes — automated orbital showcase and unlocked freeform orbit controls.',
+    tags: ['Camera', 'OrbitControls', 'Interactive'],
+    preview: { type: 'model', path: '/911-transformed.glb' },
+    icon: Eye,
+    accent: '#a78bfa',
+  },
+  {
     key: 'porsche-ground-projection',
     name: 'Porsche 930',
     subtitle: 'Ground Projection',
