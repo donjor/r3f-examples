@@ -3,11 +3,10 @@ import { useLayoutEffect, useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useConfiguratorStore } from '../store'
 import { vehicles } from './registry'
-import { presets } from '../environments/presets'
+import { GROUND_Y } from '../environments/EnvironmentRenderer'
 
 /** Find the best candidate body/paint material in the model */
 function findPaintMaterial(materials: Record<string, THREE.Material>): THREE.MeshStandardMaterial | null {
-  // Try common paint material names first
   const paintNames = ['paint', 'body', 'Body', 'car_body', 'Paint', 'CAR_PAINT', 'carbody']
   for (const name of paintNames) {
     const mat = materials[name]
@@ -16,8 +15,6 @@ function findPaintMaterial(materials: Record<string, THREE.Material>): THREE.Mes
     }
   }
 
-  // Fall back to the material used on the most meshes
-  // (heuristic: largest area = body panels)
   let best: THREE.MeshStandardMaterial | null = null
   let bestCount = 0
   const counts = new Map<THREE.Material, number>()
@@ -38,26 +35,20 @@ export function VehicleModel() {
   const vehicleKey = useConfiguratorStore((s) => s.vehicle)
   const qualityTier = useConfiguratorStore((s) => s.qualityTier)
   const paintColor = useConfiguratorStore((s) => s.paintColor)
-  const environment = useConfiguratorStore((s) => s.environment)
 
   const meta = vehicles[vehicleKey]
   const modelPath = meta
     ? meta.pathTemplate.replace('{tier}', qualityTier)
     : ''
-  const groundY = presets[environment]?.groundY ?? -1.16
 
-  // This will suspend until model is loaded
   const { scene, materials } = useGLTF(modelPath)
 
-  // Clone scene, isolate paint material, compute ground offset
   const { cloned, paintMat, originalColor, groundOffset } = useMemo(() => {
     const c = scene.clone(true)
 
-    // Compute bounding box for auto-grounding
     const box = new THREE.Box3().setFromObject(c)
     const offset = -box.min.y
 
-    // Find and clone paint material so we don't mutate the GLTF cache
     const srcMat = findPaintMaterial(materials as Record<string, THREE.Material>)
     if (!srcMat) return { cloned: c, paintMat: null, originalColor: null, groundOffset: offset }
 
@@ -74,7 +65,6 @@ export function VehicleModel() {
     return { cloned: c, paintMat: clonedMat, originalColor: origColor, groundOffset: offset }
   }, [scene, materials])
 
-  // Apply paint color + shadows
   useLayoutEffect(() => {
     if (!meta) return
 
@@ -101,7 +91,7 @@ export function VehicleModel() {
     <group
       position={[
         meta.position[0],
-        meta.position[1] + groundOffset * meta.scale + groundY,
+        meta.position[1] + groundOffset * meta.scale + GROUND_Y,
         meta.position[2],
       ]}
     >

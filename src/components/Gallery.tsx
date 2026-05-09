@@ -29,6 +29,7 @@ interface SceneInfo {
   icon: ComponentType<{ className?: string }>
   accent: string
   featured?: boolean
+  category: 'example' | 'custom'
 }
 
 interface GalleryProps {
@@ -53,6 +54,7 @@ const scenes: SceneInfo[] = [
     icon: Sparkles,
     accent: '#f59e0b',
     featured: true,
+    category: 'example',
   },
   {
     key: 'porsche-live-envmaps',
@@ -63,6 +65,7 @@ const scenes: SceneInfo[] = [
     preview: { type: 'model', path: '/911-transformed.glb' },
     icon: Video,
     accent: '#818cf8',
+    category: 'example',
   },
   {
     key: 'porsche-showcase',
@@ -73,6 +76,7 @@ const scenes: SceneInfo[] = [
     preview: { type: 'model', path: '/911-transformed.glb' },
     icon: Eye,
     accent: '#a78bfa',
+    category: 'custom',
   },
   {
     key: 'porsche-ground-projection',
@@ -83,6 +87,7 @@ const scenes: SceneInfo[] = [
     preview: { type: 'model', path: '/porsche-transformed.glb' },
     icon: Globe,
     accent: '#34d399',
+    category: 'example',
   },
   {
     key: 'datsun-ssgi',
@@ -93,6 +98,7 @@ const scenes: SceneInfo[] = [
     preview: { type: 'model', path: '/datsun-transformed.glb' },
     icon: Sun,
     accent: '#fbbf24',
+    category: 'example',
   },
   {
     key: 'env-transitions',
@@ -103,6 +109,7 @@ const scenes: SceneInfo[] = [
     preview: { type: 'geometry', shape: 'sphere' },
     icon: Palette,
     accent: '#f472b6',
+    category: 'example',
   },
   {
     key: 'viewcube',
@@ -113,6 +120,7 @@ const scenes: SceneInfo[] = [
     preview: { type: 'geometry', shape: 'torus' },
     icon: Box,
     accent: '#22d3ee',
+    category: 'example',
   },
   {
     key: 'gltf-reuse',
@@ -123,6 +131,7 @@ const scenes: SceneInfo[] = [
     preview: { type: 'model', path: '/shoe.gltf' },
     icon: Copy,
     accent: '#fb923c',
+    category: 'example',
   },
 ]
 
@@ -252,7 +261,8 @@ export default function Gallery({
             </div>
             <div className="flex items-center gap-10 pt-3 max-lg:justify-center">
               {[
-                { n: '7', l: 'Scenes' },
+                { n: String(scenes.filter((s) => s.category === 'example').length), l: 'Examples' },
+                { n: String(scenes.filter((s) => s.category === 'custom').length), l: 'Custom' },
                 { n: '9', l: 'Vehicles' },
                 { n: '4', l: 'Environments' },
               ].map((s) => (
@@ -276,40 +286,69 @@ export default function Gallery({
         </div>
       </section>
 
-      {/* ── Scenes grid ─────────────────────────────── */}
+      {/* ── Examples grid ────────────────────────────── */}
       <section ref={scenesRef} className="relative px-6 py-24">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white/90">Scenes</h2>
-              <p className="text-sm text-white/25 mt-1.5">Interactive R3F demonstrations</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white/90">Examples</h2>
+              <p className="text-sm text-white/25 mt-1.5">Faithful R3F reconstructions</p>
             </div>
             <span className="text-[11px] text-white/15 uppercase tracking-widest font-medium">
-              {scenes.length} demos
+              {scenes.filter((s) => s.category === 'example').length} demos
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {scenes.map((scene, i) => (
-              <SceneCard
-                key={scene.key}
-                scene={scene}
-                previewMode={previewMode}
-                onClick={() => onOpenScene(scene.key)}
-                index={i}
-              />
-            ))}
+            {scenes
+              .filter((s) => s.category === 'example')
+              .map((scene, i) => (
+                <SceneCard
+                  key={scene.key}
+                  scene={scene}
+                  previewMode={previewMode}
+                  onClick={() => onOpenScene(scene.key)}
+                  index={i}
+                />
+              ))}
           </div>
         </div>
       </section>
 
-      {/* ── Configurator banner ──────────────────────── */}
-      <section className="px-6 pb-24">
+      {/* ── Custom grid ──────────────────────────────── */}
+      <section className="relative px-6 pb-24">
         <div className="max-w-7xl mx-auto">
-          <ConfiguratorBanner
-            previewMode={previewMode}
-            onClick={onOpenConfigurator}
-          />
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white/90">Custom</h2>
+              <p className="text-sm text-white/25 mt-1.5">Modified scenes & experiments</p>
+            </div>
+            <span className="text-[11px] text-white/15 uppercase tracking-widest font-medium">
+              {scenes.filter((s) => s.category === 'custom').length} demo{scenes.filter((s) => s.category === 'custom').length !== 1 ? 's' : ''}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {scenes
+              .filter((s) => s.category === 'custom')
+              .map((scene, i) => (
+                <SceneCard
+                  key={scene.key}
+                  scene={scene}
+                  previewMode={previewMode}
+                  onClick={() => onOpenScene(scene.key)}
+                  index={i}
+                />
+              ))}
+          </div>
+
+          {/* Configurator banner */}
+          <div className="mt-12">
+            <ConfiguratorBanner
+              previewMode={previewMode}
+              onClick={onOpenConfigurator}
+            />
+          </div>
         </div>
       </section>
 
@@ -416,6 +455,8 @@ function SceneCard({
             modelPath={scene.preview.type === 'model' ? scene.preview.path : undefined}
             geometry={scene.preview.type === 'geometry' ? scene.preview.shape : undefined}
             className="w-full h-full"
+            accent={scene.accent}
+            icon={scene.icon}
           />
         ) : (
           <ImagePlaceholder icon={Icon} accent={scene.accent} />

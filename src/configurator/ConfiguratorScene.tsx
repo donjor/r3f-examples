@@ -6,6 +6,7 @@ import { EnvironmentRenderer } from './environments/EnvironmentRenderer'
 import { VehicleModel } from './vehicles/VehicleModel'
 import { PostProcessing } from './effects/PostProcessing'
 import { ControlPanel } from './ui/ControlPanel'
+import { VehicleBar } from './ui/VehicleBar'
 import { useConfiguratorStore } from './store'
 
 export function ConfiguratorScene() {
@@ -39,11 +40,15 @@ export function ConfiguratorScene() {
         />
       </Canvas>
 
+      <VehicleBar
+        panelOpen={panelOpen}
+        previewMode={previewMode}
+        onPreviewModeChange={setPreviewMode}
+      />
+
       <ControlPanel
         open={panelOpen}
         onClose={() => setPanelOpen(false)}
-        previewMode={previewMode}
-        onPreviewModeChange={setPreviewMode}
       />
 
       {!panelOpen && (

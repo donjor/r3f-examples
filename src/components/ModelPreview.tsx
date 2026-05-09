@@ -1,6 +1,6 @@
-import { Suspense, useMemo, useRef } from 'react'
+import { Suspense, useMemo, useRef, useState, type ComponentType } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, Clone, useGLTF } from '@react-three/drei'
+import { Environment, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
 /* ── Auto-rotating wrapper ───────────────────────────── */
@@ -53,10 +53,44 @@ function GeometryPreview({ shape }: { shape: 'sphere' | 'torus' }) {
   )
 }
 
-/* ── Loading shimmer placeholder ─────────────────────── */
-function Shimmer() {
+/* ── Loading skeleton placeholder ─────────────────────── */
+function SkeletonLoader({
+  accent,
+  icon: Icon,
+}: {
+  accent?: string
+  icon?: ComponentType<{ className?: string }>
+}) {
+  const color = accent ?? '#6366f1'
   return (
-    <div className="absolute inset-0 animate-shimmer rounded-xl" />
+    <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+      {/* radial accent background */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(circle at 50% 60%, ${color}12, transparent 65%)`,
+        }}
+      />
+      {/* subtle grid */}
+      <div
+        className="absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
+      {/* icon behind the ring */}
+      {Icon && <Icon className="absolute size-12 text-white/[0.04]" />}
+      {/* pulsing ring loader */}
+      <div
+        className="size-10 rounded-full border-2 animate-spin"
+        style={{
+          borderColor: `${color}18`,
+          borderTopColor: `${color}90`,
+        }}
+      />
+    </div>
   )
 }
 
@@ -67,6 +101,8 @@ export interface ModelPreviewProps {
   rotationSpeed?: number
   className?: string
   quality?: 'low' | 'high'
+  accent?: string
+  icon?: ComponentType<{ className?: string }>
 }
 
 export default function ModelPreview({
@@ -75,10 +111,21 @@ export default function ModelPreview({
   rotationSpeed = 0.4,
   className,
   quality = 'low',
+  accent,
+  icon,
 }: ModelPreviewProps) {
+  const [loaded, setLoaded] = useState(false)
+
   return (
     <div className={className} style={{ position: 'relative' }}>
-      <Suspense fallback={<Shimmer />}>
+      {/* Skeleton shown until Canvas reports first render */}
+      <div
+        className="absolute inset-0 z-10 transition-opacity duration-500"
+        style={{ opacity: loaded ? 0 : 1, pointerEvents: 'none' }}
+      >
+        <SkeletonLoader accent={accent} icon={icon} />
+      </div>
+      <Suspense fallback={<SkeletonLoader accent={accent} icon={icon} />}>
         <Canvas
           camera={{ position: [4, 2, 4], fov: 35 }}
           dpr={quality === 'high' ? [1, 2] : [1, 1]}
@@ -91,6 +138,7 @@ export default function ModelPreview({
           <Environment preset="city" background={false} />
           <Suspense fallback={null}>
             <Turntable speed={rotationSpeed}>
+              <ReadyNotifier onReady={() => setLoaded(true)} />
               {modelPath && <NormalizedModel path={modelPath} />}
               {geometry && <GeometryPreview shape={geometry} />}
             </Turntable>
@@ -99,4 +147,16 @@ export default function ModelPreview({
       </Suspense>
     </div>
   )
+}
+
+/* ── Signals the first frame rendered inside the inner Suspense ── */
+function ReadyNotifier({ onReady }: { onReady: () => void }) {
+  const called = useRef(false)
+  useFrame(() => {
+    if (!called.current) {
+      called.current = true
+      onReady()
+    }
+  })
+  return null
 }

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useCallback } from 'react'
+import { lazy, Suspense, useState, useCallback, useSyncExternalStore } from 'react'
 import { Leva } from 'leva'
 import { ArrowLeft } from 'lucide-react'
 import Gallery from '@/components/Gallery'
@@ -20,25 +20,51 @@ type SceneKey = keyof typeof sceneComponents
 
 const ConfiguratorLazy = lazy(() => import('./configurator'))
 
-/* ── App shell ───────────────────────────────────────── */
+/* ── Hash-based routing ──────────────────────────────── */
 
 type View = 'gallery' | 'scene' | 'configurator'
 
+interface RouteState {
+  view: View
+  activeScene: SceneKey | null
+}
+
+function parseHash(hash: string): RouteState {
+  const h = hash.replace(/^#\/?/, '')
+  if (h === 'configurator') return { view: 'configurator', activeScene: null }
+  const sceneMatch = h.match(/^scene\/(.+)$/)
+  if (sceneMatch && sceneMatch[1] in sceneComponents) {
+    return { view: 'scene', activeScene: sceneMatch[1] as SceneKey }
+  }
+  return { view: 'gallery', activeScene: null }
+}
+
+function subscribeHash(cb: () => void) {
+  window.addEventListener('hashchange', cb)
+  return () => window.removeEventListener('hashchange', cb)
+}
+
+function getHashSnapshot() {
+  return window.location.hash
+}
+
+/* ── App shell ───────────────────────────────────────── */
+
 export default function App() {
-  const [view, setView] = useState<View>('gallery')
-  const [activeScene, setActiveScene] = useState<SceneKey | null>(null)
+  const hash = useSyncExternalStore(subscribeHash, getHashSnapshot)
+  const { view, activeScene } = parseHash(hash)
   const [previewMode, setPreviewMode] = useState<'3d' | 'image'>('3d')
 
   const openScene = useCallback((key: string) => {
-    setActiveScene(key as SceneKey)
-    setView('scene')
+    window.location.hash = `#/scene/${key}`
   }, [])
 
-  const openConfigurator = useCallback(() => setView('configurator'), [])
+  const openConfigurator = useCallback(() => {
+    window.location.hash = '#/configurator'
+  }, [])
 
   const goHome = useCallback(() => {
-    setView('gallery')
-    setActiveScene(null)
+    window.location.hash = '#/'
   }, [])
 
   /* active scene */

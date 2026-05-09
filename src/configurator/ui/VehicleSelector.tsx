@@ -27,7 +27,6 @@ export function VehicleSelector({ previewMode }: VehicleSelectorProps) {
 
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Auto-scroll active card into view
   useEffect(() => {
     const container = scrollRef.current
     if (!container) return
@@ -59,7 +58,6 @@ export function VehicleSelector({ previewMode }: VehicleSelectorProps) {
                   : 'border-white/[0.04] bg-white/[0.02] hover:border-white/[0.10] hover:bg-white/[0.04]'
               }`}
             >
-              {/* Preview area */}
               <div className="relative w-full aspect-[4/3] bg-black/30 overflow-hidden">
                 {previewMode === '3d' ? (
                   <ModelPreview
@@ -71,10 +69,8 @@ export function VehicleSelector({ previewMode }: VehicleSelectorProps) {
                 ) : (
                   <VehicleStaticPreview active={active} />
                 )}
-                {/* Bottom gradient */}
                 <div className="absolute bottom-0 inset-x-0 h-6 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
               </div>
-              {/* Label */}
               <div className="px-2.5 py-2">
                 <span
                   className={`block text-[10px] font-medium leading-tight line-clamp-2 transition-colors ${
@@ -93,7 +89,6 @@ export function VehicleSelector({ previewMode }: VehicleSelectorProps) {
       <div className="space-y-2">
         <span className="text-[10px] font-medium text-white/30 uppercase tracking-[0.15em]">Paint</span>
         <div className="flex items-center gap-1.5 flex-wrap">
-          {/* Original / reset button */}
           <button
             onClick={() => setPaintColor(null)}
             title="Original color"
