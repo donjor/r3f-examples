@@ -13,18 +13,46 @@ import {
   Settings,
   ArrowRight,
   ShoppingBag,
-  Gamepad2,
-  Atom,
   ScrollText,
   Aperture,
   Snowflake,
   LayoutGrid,
+  Droplets,
+  Cloud,
+  SwatchBook,
+  Gem,
+  Zap,
+  Hexagon,
+  Laptop,
+  Watch,
+  Smile,
+  Route,
+  Frame,
+  Footprints,
+  Fish,
+  Shirt,
+  Train,
+  Flame,
+  Leaf,
+  Hexagon as HexIcon,
+  ToggleRight,
 } from 'lucide-react'
 import ModelPreview from './ModelPreview'
 
 /* ═══════════════════════════════════════════════════════
    Types
    ═══════════════════════════════════════════════════════ */
+
+type Group =
+  | 'environment'
+  | 'effects'
+  | 'caustics'
+  | 'shaders'
+  | 'scroll'
+  | 'motion'
+  | 'interaction'
+  | 'configurator'
+  | 'utility'
 
 interface SceneInfo {
   key: string
@@ -40,7 +68,20 @@ interface SceneInfo {
   accent: string
   featured?: boolean
   category: 'example' | 'custom'
+  group?: Group
 }
+
+const GROUPS: { key: Group; label: string; desc: string }[] = [
+  { key: 'environment', label: 'Environment', desc: 'HDR, lightformers, sky' },
+  { key: 'effects', label: 'Postprocessing', desc: 'SSGI, bloom, LUT, godrays' },
+  { key: 'caustics', label: 'Caustics & Glass', desc: 'Transmission, refraction' },
+  { key: 'shaders', label: 'Shaders', desc: 'Custom GLSL, instancing' },
+  { key: 'scroll', label: 'Scroll & Views', desc: 'ScrollControls, multi-viewport' },
+  { key: 'motion', label: 'Motion & Animation', desc: 'Paths, mixer, fragments' },
+  { key: 'interaction', label: 'Interaction', desc: 'react-spring, controls' },
+  { key: 'configurator', label: 'Configurators', desc: 'State-driven, decals' },
+  { key: 'utility', label: 'Utility', desc: 'HUD, instancing, edges' },
+]
 
 interface GalleryProps {
   previewMode: '3d' | 'image'
@@ -55,6 +96,7 @@ const scenes: SceneInfo[] = [
   // ── Environment & lighting ────────────────────────────
   {
     key: 'lambo-envmaps',
+    group: 'environment',
     name: 'Lamborghini Urus',
     subtitle: 'Environment Maps',
     desc: 'HDR environment reflections with Lightformer studio lighting and LUT color grading.',
@@ -67,6 +109,7 @@ const scenes: SceneInfo[] = [
   },
   {
     key: 'porsche-live-envmaps',
+    group: 'environment',
     name: 'Porsche 911',
     subtitle: 'Live Environment Maps',
     desc: 'Animated orbital camera with adaptive performance monitoring and accumulative shadows.',
@@ -78,6 +121,7 @@ const scenes: SceneInfo[] = [
   },
   {
     key: 'porsche-ground-projection',
+    group: 'environment',
     name: 'Porsche 930',
     subtitle: 'Ground Projection',
     desc: 'Ground-projected HDRI skybox with fisheye distortion and custom tone mapping.',
@@ -89,6 +133,7 @@ const scenes: SceneInfo[] = [
   },
   {
     key: 'env-transitions',
+    group: 'environment',
     name: 'Environment',
     subtitle: 'Preset Transitions',
     desc: 'Smooth animated transitions between 10 drei environment presets on a metallic sphere.',
@@ -98,9 +143,22 @@ const scenes: SceneInfo[] = [
     accent: '#f472b6',
     category: 'example',
   },
+  {
+    key: 'color-grading',
+    group: 'environment',
+    name: 'Color Grading',
+    subtitle: 'LUT Postprocessing',
+    desc: 'Cubicle-99 LUT cube applied via three-stdlib LUTPass over a clearcoated terrazo sphere.',
+    tags: ['LUT', 'three-stdlib', 'Effects'],
+    preview: { type: 'image', path: '/thumbs/color-grading.webp' },
+    icon: SwatchBook,
+    accent: '#fde047',
+    category: 'example',
+  },
   // ── Postprocessing & effects ──────────────────────────
   {
     key: 'datsun-ssgi',
+    group: 'effects',
     name: 'Datsun 240Z',
     subtitle: 'SSGI & Ambient Occlusion',
     desc: 'Screen-space global illumination with N8AO, Bloom, and screenshot capture.',
@@ -112,6 +170,7 @@ const scenes: SceneInfo[] = [
   },
   {
     key: 'shopping',
+    group: 'effects',
     name: 'Shopping Kitchen',
     subtitle: 'Selection & Outline',
     desc: 'Hover-driven Selection/Outline with N8AO + TiltShift in a parallax-tracked kitchen scene.',
@@ -121,32 +180,34 @@ const scenes: SceneInfo[] = [
     accent: '#f472b6',
     category: 'example',
   },
-  // ── Physics & interaction ─────────────────────────────
   {
-    key: 'ecctrl-fisheye',
-    name: 'Ecctrl Fisheye',
-    subtitle: 'Character Controller',
-    desc: 'Rapier physics character controller with WASD + Space jump under a fisheye-projected camera.',
-    tags: ['Rapier', 'Ecctrl', 'Fisheye', 'KeyboardControls'],
-    preview: { type: 'image', path: '/thumbs/ecctrl-fisheye.webp' },
-    icon: Gamepad2,
-    accent: '#a78bfa',
+    key: 'volumetric-light-godray',
+    group: 'effects',
+    name: 'Volumetric Godray',
+    subtitle: 'GodRays + Video',
+    desc: 'Video texture emitter projecting volumetric godrays onto a reflective floor with cube-cam sphere.',
+    tags: ['GodRays', 'VideoTexture', 'MeshReflector', 'Bloom'],
+    preview: { type: 'image', path: '/thumbs/volumetric-light-godray.webp' },
+    icon: Zap,
+    accent: '#fcd34d',
     category: 'example',
   },
   {
-    key: 'object-clump',
-    name: 'Object Clump',
-    subtitle: 'Physics & N8AO',
-    desc: 'Forty instanced spheres attracted to center under Cannon physics with N8AO ambient occlusion.',
-    tags: ['Cannon', 'Physics', 'Instancing', 'N8AO'],
-    preview: { type: 'image', path: '/thumbs/object-clump.webp' },
-    icon: Atom,
-    accent: '#94a3b8',
+    key: 'lusion-connectors',
+    group: 'effects',
+    name: 'Connectors',
+    subtitle: 'Rapier Floating Boxes',
+    desc: 'Cuboid colliders attracted to center under zero-gravity Rapier physics, with N8AO and accent lights.',
+    tags: ['Rapier', 'Physics', 'N8AO', 'Transmission'],
+    preview: { type: 'image', path: '/thumbs/lusion-connectors.webp' },
+    icon: Hexagon,
+    accent: '#4060ff',
     category: 'example',
   },
   // ── Portals & transmission ────────────────────────────
   {
     key: 'enter-portals',
+    group: 'caustics',
     name: 'Enter Portals',
     subtitle: 'MeshPortalMaterial',
     desc: 'Three framed portals you double-click to enter — Drei MeshPortalMaterial with camera transition.',
@@ -158,6 +219,7 @@ const scenes: SceneInfo[] = [
   },
   {
     key: 'frosted-glass',
+    group: 'caustics',
     name: 'Frosted Glass',
     subtitle: 'Transmission Lens',
     desc: 'Pointer-following frosted glass disk reveals a Nike shoe behind it via MeshTransmissionMaterial.',
@@ -167,9 +229,71 @@ const scenes: SceneInfo[] = [
     accent: '#67e8f9',
     category: 'example',
   },
+  {
+    key: 'caustics',
+    group: 'caustics',
+    name: 'Caustics',
+    subtitle: 'Glass + Light Refraction',
+    desc: 'Drinking glass with caustics, MeshTransmissionMaterial, and animated Lightformer studio.',
+    tags: ['Caustics', 'Transmission', 'AccumulativeShadows'],
+    preview: { type: 'image', path: '/thumbs/caustics.webp' },
+    icon: Droplets,
+    accent: '#fda4af',
+    category: 'example',
+  },
+  {
+    key: 'diamond-refraction',
+    group: 'caustics',
+    name: 'Diamond Refraction',
+    subtitle: 'MeshRefractionMaterial',
+    desc: 'Multi-bounce diamond refraction with chromatic aberration, caustics, and bloom.',
+    tags: ['Refraction', 'Caustics', 'Bloom'],
+    preview: { type: 'image', path: '/thumbs/diamond-refraction.webp' },
+    icon: Gem,
+    accent: '#a5f3fc',
+    category: 'example',
+  },
+  {
+    key: 'aquarium',
+    group: 'caustics',
+    name: 'Aquarium',
+    subtitle: 'Stencil + Transmission',
+    desc: 'Sea turtle and floating spheres inside a glass cube — stencil-masked contents with iridescent transmission.',
+    tags: ['Stencil', 'Transmission', 'Instancing', 'Animation'],
+    preview: { type: 'image', path: '/thumbs/aquarium.webp' },
+    icon: Fish,
+    accent: '#7dd3fc',
+    category: 'example',
+  },
+  // ── Shaders & custom materials ────────────────────────
+  {
+    key: 'shader-fire',
+    group: 'shaders',
+    name: 'Shader Fire',
+    subtitle: 'Volumetric Raymarch',
+    desc: 'Ray-marched volumetric fire driven by simplex-noise turbulence inside a unit cube ShaderMaterial.',
+    tags: ['ShaderMaterial', 'GLSL', 'Volumetric'],
+    preview: { type: 'image', path: '/thumbs/shader-fire.webp' },
+    icon: Flame,
+    accent: '#fb923c',
+    category: 'example',
+  },
+  {
+    key: 'grass-shader',
+    group: 'shaders',
+    name: 'Grass Shader',
+    subtitle: 'Instanced Wind Sway',
+    desc: '50,000 instanced grass blades with quaternion orientation and simplex-noise wind in a custom shader.',
+    tags: ['Instancing', 'ShaderMaterial', 'Simplex'],
+    preview: { type: 'image', path: '/thumbs/grass-shader.webp' },
+    icon: Leaf,
+    accent: '#86efac',
+    category: 'example',
+  },
   // ── Scroll & multi-viewport UI ────────────────────────
   {
     key: 'gltf-animations-tied-to-scroll',
+    group: 'scroll',
     name: 'Scroll-Driven Animation',
     subtitle: 'ScrollControls + Mixer',
     desc: 'Skinned-mesh animation scrubbed by ScrollControls with SoftShadows and TiltShift bloom.',
@@ -181,6 +305,7 @@ const scenes: SceneInfo[] = [
   },
   {
     key: 'view-tracking',
+    group: 'scroll',
     name: 'View Tracking',
     subtitle: 'Multi-Viewport HTML',
     desc: 'Drei View — multiple 3D viewports tracked to HTML elements within a smooth-scrolled article.',
@@ -190,9 +315,133 @@ const scenes: SceneInfo[] = [
     accent: '#fbbf24',
     category: 'example',
   },
+  {
+    key: 'image-gallery',
+    group: 'scroll',
+    name: 'Image Gallery',
+    subtitle: 'Reflective Wall',
+    desc: 'Click-to-focus framed Pexels images on a MeshReflectorMaterial floor with smooth camera transitions.',
+    tags: ['Reflections', 'Annotations', 'Image'],
+    preview: { type: 'image', path: '/thumbs/image-gallery.webp' },
+    icon: Frame,
+    accent: '#fb7185',
+    category: 'example',
+  },
+  // ── Animation & motion paths ──────────────────────────
+  {
+    key: 'motionpathcontrols',
+    group: 'motion',
+    name: 'Motion Path Controls',
+    subtitle: 'Curve-Driven Camera',
+    desc: 'Camera follows a switchable bezier path (Circle / Rollercoaster / Infinity / Heart) with DotScreen + TiltShift.',
+    tags: ['MotionPath', 'Curves', 'Effects'],
+    preview: { type: 'image', path: '/thumbs/motionpathcontrols.webp' },
+    icon: Route,
+    accent: '#fb923c',
+    category: 'example',
+  },
+  {
+    key: 'cell-fracture',
+    group: 'motion',
+    name: 'Cell Fracture',
+    subtitle: 'Animated Fragments',
+    desc: 'Click the "hello" text to trigger a Blender cell-fracture animation with MeshNormalMaterial fragments.',
+    tags: ['Animation', 'Fragments', 'Click'],
+    preview: { type: 'image', path: '/thumbs/cell-fracture.webp' },
+    icon: Smile,
+    accent: '#c084fc',
+    category: 'example',
+  },
+  {
+    key: 'clouds',
+    group: 'motion',
+    name: 'Volumetric Clouds',
+    subtitle: 'Drei Cloud Composition',
+    desc: 'Stacked Drei <Cloud> particles inside a rotating <Clouds> group with red/white spotlight tinting.',
+    tags: ['Clouds', 'Lighting', 'Volumetric'],
+    preview: { type: 'image', path: '/thumbs/clouds.webp' },
+    icon: Cloud,
+    accent: '#e2e8f0',
+    category: 'example',
+  },
+  {
+    key: 'night-train',
+    group: 'motion',
+    name: 'Night Train',
+    subtitle: 'Merged Cabins + Scroll',
+    desc: 'Five cabins of merged instanced seats scrolled into view with a reflective floor under fog.',
+    tags: ['Merged', 'Instancing', 'ScrollControls', 'Reflections'],
+    preview: { type: 'image', path: '/thumbs/night-train.webp' },
+    icon: Train,
+    accent: '#94a3b8',
+    category: 'example',
+  },
+  // ── Interaction & spring ──────────────────────────────
+  {
+    key: 'floating-laptop',
+    group: 'interaction',
+    name: 'Floating Laptop',
+    subtitle: 'react-spring + Hinge',
+    desc: 'Click the MacBook to open the hinge — react-spring drives the animation, background, and hinge angle.',
+    tags: ['react-spring', 'Interaction', 'GLTF'],
+    preview: { type: 'image', path: '/thumbs/floating-laptop.webp' },
+    icon: Laptop,
+    accent: '#d25578',
+    category: 'example',
+  },
+  {
+    key: 'bouncy-watch',
+    group: 'interaction',
+    name: 'Bouncy Watch',
+    subtitle: 'PresentationControls',
+    desc: 'Snap-rotation watch model with HTML annotation overlay using Drei PresentationControls + Html.',
+    tags: ['PresentationControls', 'Html', 'Spring'],
+    preview: { type: 'image', path: '/thumbs/bouncy-watch.webp' },
+    icon: Watch,
+    accent: '#fde68a',
+    category: 'example',
+  },
+  // ── Configurators (state-driven) ──────────────────────
+  {
+    key: 'shoe-configurator',
+    group: 'configurator',
+    name: 'Shoe Configurator',
+    subtitle: 'Per-Material Color Picker',
+    desc: 'Click a shoe part to bring up a HexColorPicker — valtio state, per-material colors, custom SVG cursors.',
+    tags: ['Configurator', 'Valtio', 'ColorPicker'],
+    preview: { type: 'image', path: '/thumbs/shoe-configurator.webp' },
+    icon: Footprints,
+    accent: '#fb923c',
+    category: 'example',
+  },
+  {
+    key: 't-shirt-configurator',
+    group: 'configurator',
+    name: 'T-Shirt Configurator',
+    subtitle: 'Decals + Color',
+    desc: 'Color palette + brand decal selector over a baked t-shirt with AccumulativeShadows and framer-motion overlay.',
+    tags: ['Configurator', 'Decal', 'FramerMotion', 'Valtio'],
+    preview: { type: 'image', path: '/thumbs/t-shirt-configurator.webp' },
+    icon: Shirt,
+    accent: '#EFBD4E',
+    category: 'example',
+  },
+  {
+    key: 'react-spring-animations',
+    group: 'interaction',
+    name: 'React Spring Switch',
+    subtitle: 'Mixed DOM + 3D Spring',
+    desc: 'Single shared react-spring value drives DOM background, h1 color, 3D sphere position and light color.',
+    tags: ['react-spring', 'Interaction', 'DOM+3D'],
+    preview: { type: 'image', path: '/thumbs/react-spring-animations.webp' },
+    icon: ToggleRight,
+    accent: '#7fffd4',
+    category: 'example',
+  },
   // ── Utility primitives ────────────────────────────────
   {
     key: 'viewcube',
+    group: 'utility',
     name: 'ViewCube',
     subtitle: 'HUD Overlay',
     desc: 'Interactive orientation gizmo rendered via RenderTexture face labels in a Hud layer.',
@@ -203,7 +452,20 @@ const scenes: SceneInfo[] = [
     category: 'example',
   },
   {
+    key: 'edgesgeometry',
+    group: 'utility',
+    name: 'Edges & Outlines',
+    subtitle: 'Crease Lines',
+    desc: 'Aluminium bracket with Drei Edges + Outlines on hover for technical-drawing-style overlays.',
+    tags: ['Edges', 'Outlines', 'AccumulativeShadows'],
+    preview: { type: 'image', path: '/thumbs/edgesgeometry.webp' },
+    icon: HexIcon,
+    accent: '#cbd5e1',
+    category: 'example',
+  },
+  {
     key: 'gltf-reuse',
+    group: 'utility',
     name: 'GLTF Reuse',
     subtitle: 'Instanced Rendering',
     desc: 'Efficient geometry and material reuse with mirrored instancing of a shoe model.',
@@ -263,6 +525,15 @@ export default function Gallery({
   onPreviewModeChange,
 }: GalleryProps) {
   const scenesRef = useRef<HTMLDivElement>(null)
+  const [activeGroup, setActiveGroup] = useState<Group | null>(null)
+
+  /* group counts */
+  const exampleScenes = scenes.filter((s) => s.category === 'example')
+  const groupCounts = GROUPS.map((g) => ({
+    ...g,
+    count: exampleScenes.filter((s) => s.group === g.key).length,
+  })).filter((g) => g.count > 0)
+  const filteredExamples = activeGroup ? exampleScenes.filter((s) => s.group === activeGroup) : exampleScenes
 
   /* cursor glow */
   useEffect(() => {
@@ -385,14 +656,33 @@ export default function Gallery({
               <p className="text-sm text-white/25 mt-1.5">Faithful R3F reconstructions</p>
             </div>
             <span className="text-[11px] text-white/15 uppercase tracking-widest font-medium">
-              {scenes.filter((s) => s.category === 'example').length} demos
+              {activeGroup ? `${filteredExamples.length} of ${exampleScenes.length}` : `${exampleScenes.length} demos`}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {scenes
-              .filter((s) => s.category === 'example')
-              .map((scene, i) => (
+          {/* filter chips */}
+          <div className="flex flex-wrap items-center gap-1.5 mb-10">
+            <FilterChip
+              active={activeGroup === null}
+              onClick={() => setActiveGroup(null)}
+              label="All"
+              count={exampleScenes.length}
+            />
+            {groupCounts.map((g) => (
+              <FilterChip
+                key={g.key}
+                active={activeGroup === g.key}
+                onClick={() => setActiveGroup(activeGroup === g.key ? null : g.key)}
+                label={g.label}
+                count={g.count}
+              />
+            ))}
+          </div>
+
+          {activeGroup ? (
+            /* flat filtered grid */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredExamples.map((scene, i) => (
                 <SceneCard
                   key={scene.key}
                   scene={scene}
@@ -401,7 +691,39 @@ export default function Gallery({
                   index={i}
                 />
               ))}
-          </div>
+            </div>
+          ) : (
+            /* grouped sections */
+            <div className="space-y-14">
+              {groupCounts.map((g) => {
+                const items = exampleScenes.filter((s) => s.group === g.key)
+                return (
+                  <div key={g.key}>
+                    <div className="flex items-baseline justify-between mb-5">
+                      <div className="flex items-baseline gap-3">
+                        <h3 className="text-lg font-semibold text-white/80">{g.label}</h3>
+                        <span className="text-[11px] text-white/25 tracking-wide">{g.desc}</span>
+                      </div>
+                      <span className="text-[10px] text-white/20 uppercase tracking-widest">
+                        {g.count} demo{g.count !== 1 ? 's' : ''}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {items.map((scene, i) => (
+                        <SceneCard
+                          key={scene.key}
+                          scene={scene}
+                          previewMode={previewMode}
+                          href={`#/scene/${scene.key}`}
+                          index={i}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       </section>
 
@@ -452,6 +774,42 @@ export default function Gallery({
         </div>
       </footer>
     </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════
+   Filter chip (group filter)
+   ═══════════════════════════════════════════════════════ */
+
+function FilterChip({
+  active,
+  onClick,
+  label,
+  count,
+}: {
+  active: boolean
+  onClick: () => void
+  label: string
+  count: number
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`group inline-flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border ${
+        active
+          ? 'bg-white/[0.10] text-white border-white/[0.18] shadow-[0_0_24px_-6px_rgba(255,255,255,0.18)]'
+          : 'bg-white/[0.02] text-white/55 border-white/[0.06] hover:text-white/85 hover:bg-white/[0.05] hover:border-white/[0.12]'
+      }`}
+    >
+      {label}
+      <span
+        className={`min-w-5 text-center text-[10px] font-semibold tabular-nums rounded-full px-1.5 py-0.5 ${
+          active ? 'bg-white/[0.18] text-white' : 'bg-white/[0.05] text-white/40 group-hover:bg-white/[0.08]'
+        }`}
+      >
+        {count}
+      </span>
+    </button>
   )
 }
 
