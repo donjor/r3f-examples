@@ -1,0 +1,55 @@
+.vt-text {
+  line-height: 1em;
+  text-align: left;
+  font-size: 7em;
+  word-break: break-word;
+  padding: 2.5em;
+  color: #111;
+  background: #f0f0f0;
+}
+
+@media only screen and (max-width: 800px) {
+  .vt-text {
+    font-size: 4em;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .vt-text {
+    font-size: 3em;
+  }
+}
+
+.vt-view {
+  margin: 0.2em;
+  width: 400px;
+  height: 200px;
+  display: inline-block;
+  overflow: hidden;
+}
+
+@keyframes vtScaleAnim {
+  0% { transform: scale(0.3, 0.7); }
+  50% { transform: scale(1); }
+  100% { transform: scale(0.3, 0.7); }
+}
+
+@keyframes vtTranslateXAnim {
+  0% { transform: translate3d(-100px, 0, 0); }
+  25% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(100px, 0, 0); }
+  75% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100px, 0, 0); }
+}
+
+@keyframes vtTranslateYAnim {
+  0% { transform: translate3d(0, -100px, 0); }
+  25% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, 100px, 0); }
+  75% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -100px, 0); }
+}
+
+.vt-scale { animation: vtScaleAnim 5s ease-in-out 0s infinite; }
+.vt-translateX { animation: vtTranslateXAnim 10s ease-in-out 0s infinite; }
+.vt-translateY { animation: vtTranslateYAnim 5s ease-in-out 0s infinite; }

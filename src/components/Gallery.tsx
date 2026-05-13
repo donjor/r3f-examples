@@ -12,6 +12,13 @@ import {
   Copy,
   Settings,
   ArrowRight,
+  ShoppingBag,
+  Gamepad2,
+  Atom,
+  ScrollText,
+  Aperture,
+  Snowflake,
+  LayoutGrid,
 } from 'lucide-react'
 import ModelPreview from './ModelPreview'
 
@@ -25,7 +32,10 @@ interface SceneInfo {
   subtitle: string
   desc: string
   tags: string[]
-  preview: { type: 'model'; path: string } | { type: 'geometry'; shape: 'sphere' | 'torus' }
+  preview:
+    | { type: 'model'; path: string }
+    | { type: 'geometry'; shape: 'sphere' | 'torus' }
+    | { type: 'image'; path: string }
   icon: ComponentType<{ className?: string }>
   accent: string
   featured?: boolean
@@ -35,8 +45,6 @@ interface SceneInfo {
 interface GalleryProps {
   previewMode: '3d' | 'image'
   onPreviewModeChange: (mode: '3d' | 'image') => void
-  onOpenScene: (key: string) => void
-  onOpenConfigurator: () => void
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -44,6 +52,7 @@ interface GalleryProps {
    ═══════════════════════════════════════════════════════ */
 
 const scenes: SceneInfo[] = [
+  // ── Environment & lighting ────────────────────────────
   {
     key: 'lambo-envmaps',
     name: 'Lamborghini Urus',
@@ -68,17 +77,6 @@ const scenes: SceneInfo[] = [
     category: 'example',
   },
   {
-    key: 'porsche-showcase',
-    name: 'Porsche 911',
-    subtitle: 'Showcase & Freeform',
-    desc: 'Dual camera modes — automated orbital showcase and unlocked freeform orbit controls.',
-    tags: ['Camera', 'OrbitControls', 'Interactive'],
-    preview: { type: 'model', path: '/911-transformed.glb' },
-    icon: Eye,
-    accent: '#a78bfa',
-    category: 'custom',
-  },
-  {
     key: 'porsche-ground-projection',
     name: 'Porsche 930',
     subtitle: 'Ground Projection',
@@ -87,17 +85,6 @@ const scenes: SceneInfo[] = [
     preview: { type: 'model', path: '/porsche-transformed.glb' },
     icon: Globe,
     accent: '#34d399',
-    category: 'example',
-  },
-  {
-    key: 'datsun-ssgi',
-    name: 'Datsun 240Z',
-    subtitle: 'SSGI & Ambient Occlusion',
-    desc: 'Screen-space global illumination with N8AO, Bloom, and screenshot capture.',
-    tags: ['N8AO', 'Bloom', 'Screenshot'],
-    preview: { type: 'model', path: '/datsun-transformed.glb' },
-    icon: Sun,
-    accent: '#fbbf24',
     category: 'example',
   },
   {
@@ -111,6 +98,99 @@ const scenes: SceneInfo[] = [
     accent: '#f472b6',
     category: 'example',
   },
+  // ── Postprocessing & effects ──────────────────────────
+  {
+    key: 'datsun-ssgi',
+    name: 'Datsun 240Z',
+    subtitle: 'SSGI & Ambient Occlusion',
+    desc: 'Screen-space global illumination with N8AO, Bloom, and screenshot capture.',
+    tags: ['N8AO', 'Bloom', 'Screenshot'],
+    preview: { type: 'model', path: '/datsun-transformed.glb' },
+    icon: Sun,
+    accent: '#fbbf24',
+    category: 'example',
+  },
+  {
+    key: 'shopping',
+    name: 'Shopping Kitchen',
+    subtitle: 'Selection & Outline',
+    desc: 'Hover-driven Selection/Outline with N8AO + TiltShift in a parallax-tracked kitchen scene.',
+    tags: ['Selection', 'Outline', 'N8AO', 'TiltShift'],
+    preview: { type: 'image', path: '/thumbs/shopping.webp' },
+    icon: ShoppingBag,
+    accent: '#f472b6',
+    category: 'example',
+  },
+  // ── Physics & interaction ─────────────────────────────
+  {
+    key: 'ecctrl-fisheye',
+    name: 'Ecctrl Fisheye',
+    subtitle: 'Character Controller',
+    desc: 'Rapier physics character controller with WASD + Space jump under a fisheye-projected camera.',
+    tags: ['Rapier', 'Ecctrl', 'Fisheye', 'KeyboardControls'],
+    preview: { type: 'image', path: '/thumbs/ecctrl-fisheye.webp' },
+    icon: Gamepad2,
+    accent: '#a78bfa',
+    category: 'example',
+  },
+  {
+    key: 'object-clump',
+    name: 'Object Clump',
+    subtitle: 'Physics & N8AO',
+    desc: 'Forty instanced spheres attracted to center under Cannon physics with N8AO ambient occlusion.',
+    tags: ['Cannon', 'Physics', 'Instancing', 'N8AO'],
+    preview: { type: 'image', path: '/thumbs/object-clump.webp' },
+    icon: Atom,
+    accent: '#94a3b8',
+    category: 'example',
+  },
+  // ── Portals & transmission ────────────────────────────
+  {
+    key: 'enter-portals',
+    name: 'Enter Portals',
+    subtitle: 'MeshPortalMaterial',
+    desc: 'Three framed portals you double-click to enter — Drei MeshPortalMaterial with camera transition.',
+    tags: ['Portals', 'MeshPortalMaterial', 'CameraControls'],
+    preview: { type: 'image', path: '/thumbs/enter-portals.webp' },
+    icon: Aperture,
+    accent: '#e879f9',
+    category: 'example',
+  },
+  {
+    key: 'frosted-glass',
+    name: 'Frosted Glass',
+    subtitle: 'Transmission Lens',
+    desc: 'Pointer-following frosted glass disk reveals a Nike shoe behind it via MeshTransmissionMaterial.',
+    tags: ['Transmission', 'Glass', 'Valtio', 'FramerMotion'],
+    preview: { type: 'image', path: '/thumbs/frosted-glass.webp' },
+    icon: Snowflake,
+    accent: '#67e8f9',
+    category: 'example',
+  },
+  // ── Scroll & multi-viewport UI ────────────────────────
+  {
+    key: 'gltf-animations-tied-to-scroll',
+    name: 'Scroll-Driven Animation',
+    subtitle: 'ScrollControls + Mixer',
+    desc: 'Skinned-mesh animation scrubbed by ScrollControls with SoftShadows and TiltShift bloom.',
+    tags: ['ScrollControls', 'Animation', 'SoftShadows'],
+    preview: { type: 'image', path: '/thumbs/gltf-animations-tied-to-scroll.webp' },
+    icon: ScrollText,
+    accent: '#10b981',
+    category: 'example',
+  },
+  {
+    key: 'view-tracking',
+    name: 'View Tracking',
+    subtitle: 'Multi-Viewport HTML',
+    desc: 'Drei View — multiple 3D viewports tracked to HTML elements within a smooth-scrolled article.',
+    tags: ['View', 'HTML', 'Lenis', 'OrbitControls'],
+    preview: { type: 'image', path: '/thumbs/view-tracking.webp' },
+    icon: LayoutGrid,
+    accent: '#fbbf24',
+    category: 'example',
+  },
+  // ── Utility primitives ────────────────────────────────
   {
     key: 'viewcube',
     name: 'ViewCube',
@@ -132,6 +212,18 @@ const scenes: SceneInfo[] = [
     icon: Copy,
     accent: '#fb923c',
     category: 'example',
+  },
+  // ── Custom (not from r3f docs) ────────────────────────
+  {
+    key: 'porsche-showcase',
+    name: 'Porsche 911',
+    subtitle: 'Showcase & Freeform',
+    desc: 'Dual camera modes — automated orbital showcase and unlocked freeform orbit controls.',
+    tags: ['Camera', 'OrbitControls', 'Interactive'],
+    preview: { type: 'model', path: '/911-transformed.glb' },
+    icon: Eye,
+    accent: '#a78bfa',
+    category: 'custom',
   },
 ]
 
@@ -169,8 +261,6 @@ function useInView(margin = '300px') {
 export default function Gallery({
   previewMode,
   onPreviewModeChange,
-  onOpenScene,
-  onOpenConfigurator,
 }: GalleryProps) {
   const scenesRef = useRef<HTMLDivElement>(null)
 
@@ -252,12 +342,12 @@ export default function Gallery({
                   <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </button>
-              <button
-                onClick={onOpenConfigurator}
+              <a
+                href="#/configurator"
                 className="px-7 py-3 rounded-full border border-white/[0.08] text-sm font-medium text-white/60 hover:bg-white/[0.04] hover:text-white/90 hover:border-white/[0.14] transition-all"
               >
                 Configurator
-              </button>
+              </a>
             </div>
             <div className="flex items-center gap-10 pt-3 max-lg:justify-center">
               {[
@@ -307,7 +397,7 @@ export default function Gallery({
                   key={scene.key}
                   scene={scene}
                   previewMode={previewMode}
-                  onClick={() => onOpenScene(scene.key)}
+                  href={`#/scene/${scene.key}`}
                   index={i}
                 />
               ))}
@@ -336,7 +426,7 @@ export default function Gallery({
                   key={scene.key}
                   scene={scene}
                   previewMode={previewMode}
-                  onClick={() => onOpenScene(scene.key)}
+                  href={`#/scene/${scene.key}`}
                   index={i}
                 />
               ))}
@@ -346,7 +436,7 @@ export default function Gallery({
           <div className="mt-12">
             <ConfiguratorBanner
               previewMode={previewMode}
-              onClick={onOpenConfigurator}
+              href="#/configurator"
             />
           </div>
         </div>
@@ -402,15 +492,15 @@ function ToggleBtn({
 function SceneCard({
   scene,
   previewMode,
-  onClick,
+  href,
   index,
 }: {
   scene: SceneInfo
   previewMode: '3d' | 'image'
-  onClick: () => void
+  href: string
   index: number
 }) {
-  const cardRef = useRef<HTMLButtonElement>(null)
+  const cardRef = useRef<HTMLAnchorElement>(null)
   const { ref: sentinelRef, visible } = useInView()
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -431,9 +521,9 @@ function SceneCard({
   const Icon = scene.icon
 
   return (
-    <button
+    <a
       ref={cardRef}
-      onClick={onClick}
+      href={href}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={`group relative flex flex-col rounded-2xl border border-white/[0.05] bg-white/[0.015] overflow-hidden text-left transition-[transform,border-color,box-shadow] duration-300 ease-out hover:border-white/[0.10] hover:shadow-[0_24px_80px_-20px_rgba(0,0,0,0.6)] animate-in fade-in slide-in-from-bottom-3 ${
@@ -450,7 +540,14 @@ function SceneCard({
 
       {/* preview area */}
       <div className={`relative w-full ${scene.featured ? 'h-64 sm:h-72' : 'h-44 sm:h-52'}`}>
-        {previewMode === '3d' && visible ? (
+        {scene.preview.type === 'image' ? (
+          <img
+            src={scene.preview.path}
+            alt={scene.name}
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : previewMode === '3d' && visible ? (
           <ModelPreview
             modelPath={scene.preview.type === 'model' ? scene.preview.path : undefined}
             geometry={scene.preview.type === 'geometry' ? scene.preview.shape : undefined}
@@ -499,7 +596,7 @@ function SceneCard({
           boxShadow: `inset 0 1px 0 ${scene.accent}18, inset 0 0 40px ${scene.accent}06, 0 0 40px ${scene.accent}06`,
         }}
       />
-    </button>
+    </a>
   )
 }
 
@@ -543,17 +640,17 @@ function ImagePlaceholder({
 
 function ConfiguratorBanner({
   previewMode,
-  onClick,
+  href,
 }: {
   previewMode: '3d' | 'image'
-  onClick: () => void
+  href: string
 }) {
   const { ref, visible } = useInView()
 
   return (
-    <button
-      onClick={onClick}
-      className="group w-full rounded-2xl border border-white/[0.05] bg-gradient-to-br from-white/[0.025] to-white/[0.005] overflow-hidden text-left transition-all duration-300 hover:border-white/[0.10] hover:shadow-[0_24px_80px_-20px_rgba(0,0,0,0.6)] animate-in fade-in slide-in-from-bottom-3"
+    <a
+      href={href}
+      className="group block w-full rounded-2xl border border-white/[0.05] bg-gradient-to-br from-white/[0.025] to-white/[0.005] overflow-hidden text-left transition-all duration-300 hover:border-white/[0.10] hover:shadow-[0_24px_80px_-20px_rgba(0,0,0,0.6)] animate-in fade-in slide-in-from-bottom-3"
       style={{ animationDelay: '600ms', animationFillMode: 'both', animationDuration: '550ms' }}
     >
       <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2">
@@ -592,6 +689,6 @@ function ConfiguratorBanner({
           )}
         </div>
       </div>
-    </button>
+    </a>
   )
 }

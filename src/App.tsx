@@ -14,6 +14,13 @@ const sceneComponents = {
   'env-transitions': lazy(() => import('./scenes/env-transitions')),
   'viewcube': lazy(() => import('./scenes/viewcube')),
   'gltf-reuse': lazy(() => import('./scenes/gltf-reuse')),
+  'shopping': lazy(() => import('./scenes/shopping')),
+  'ecctrl-fisheye': lazy(() => import('./scenes/ecctrl-fisheye')),
+  'object-clump': lazy(() => import('./scenes/object-clump')),
+  'gltf-animations-tied-to-scroll': lazy(() => import('./scenes/gltf-animations-tied-to-scroll')),
+  'enter-portals': lazy(() => import('./scenes/enter-portals')),
+  'frosted-glass': lazy(() => import('./scenes/frosted-glass')),
+  'view-tracking': lazy(() => import('./scenes/view-tracking')),
 } as const
 
 type SceneKey = keyof typeof sceneComponents
@@ -55,14 +62,6 @@ export default function App() {
   const { view, activeScene } = parseHash(hash)
   const [previewMode, setPreviewMode] = useState<'3d' | 'image'>('3d')
 
-  const openScene = useCallback((key: string) => {
-    window.location.hash = `#/scene/${key}`
-  }, [])
-
-  const openConfigurator = useCallback(() => {
-    window.location.hash = '#/configurator'
-  }, [])
-
   const goHome = useCallback(() => {
     window.location.hash = '#/'
   }, [])
@@ -101,8 +100,6 @@ export default function App() {
       <Gallery
         previewMode={previewMode}
         onPreviewModeChange={setPreviewMode}
-        onOpenScene={openScene}
-        onOpenConfigurator={openConfigurator}
       />
     </>
   )
