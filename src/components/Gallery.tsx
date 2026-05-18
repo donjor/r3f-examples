@@ -10,7 +10,6 @@ import {
   Palette,
   Box,
   Copy,
-  Settings,
   ArrowRight,
   ShoppingBag,
   ScrollText,
@@ -36,6 +35,7 @@ import {
   Leaf,
   Hexagon as HexIcon,
   ToggleRight,
+  SlidersHorizontal,
 } from 'lucide-react'
 import ModelPreview from './ModelPreview'
 
@@ -477,6 +477,18 @@ const scenes: SceneInfo[] = [
   },
   // ── Custom (not from r3f docs) ────────────────────────
   {
+    key: 'playground',
+    name: 'Playground',
+    subtitle: 'Mix & Match Templates',
+    desc: 'Pick a vehicle, then compose any example’s environment and effects around it. Live remix surface.',
+    tags: ['Compose', 'Templates', 'Live'],
+    preview: { type: 'model', path: '/911-transformed.glb' },
+    icon: SlidersHorizontal,
+    accent: '#22d3ee',
+    featured: true,
+    category: 'custom',
+  },
+  {
     key: 'porsche-showcase',
     name: 'Porsche 911',
     subtitle: 'Showcase & Freeform',
@@ -600,7 +612,7 @@ export default function Gallery({
             </h1>
             <p className="text-base sm:text-lg text-white/35 max-w-md leading-relaxed">
               Explore interactive 3D scenes built with environment maps, post-processing
-              effects, and a full vehicle configurator.
+              effects, and custom shaders.
             </p>
             <div className="flex items-center gap-4 pt-1 max-lg:justify-center">
               <button
@@ -613,19 +625,11 @@ export default function Gallery({
                   <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </button>
-              <a
-                href="#/configurator"
-                className="px-7 py-3 rounded-full border border-white/[0.08] text-sm font-medium text-white/60 hover:bg-white/[0.04] hover:text-white/90 hover:border-white/[0.14] transition-all"
-              >
-                Configurator
-              </a>
             </div>
             <div className="flex items-center gap-10 pt-3 max-lg:justify-center">
               {[
                 { n: String(scenes.filter((s) => s.category === 'example').length), l: 'Examples' },
                 { n: String(scenes.filter((s) => s.category === 'custom').length), l: 'Custom' },
-                { n: '9', l: 'Vehicles' },
-                { n: '4', l: 'Environments' },
               ].map((s) => (
                 <div key={s.l}>
                   <div className="text-2xl font-bold text-white/85">{s.n}</div>
@@ -754,13 +758,6 @@ export default function Gallery({
               ))}
           </div>
 
-          {/* Configurator banner */}
-          <div className="mt-12">
-            <ConfiguratorBanner
-              previewMode={previewMode}
-              href="#/configurator"
-            />
-          </div>
         </div>
       </section>
 
@@ -992,61 +989,3 @@ function ImagePlaceholder({
   )
 }
 
-/* ═══════════════════════════════════════════════════════
-   Configurator banner
-   ═══════════════════════════════════════════════════════ */
-
-function ConfiguratorBanner({
-  previewMode,
-  href,
-}: {
-  previewMode: '3d' | 'image'
-  href: string
-}) {
-  const { ref, visible } = useInView()
-
-  return (
-    <a
-      href={href}
-      className="group block w-full rounded-2xl border border-white/[0.05] bg-gradient-to-br from-white/[0.025] to-white/[0.005] overflow-hidden text-left transition-all duration-300 hover:border-white/[0.10] hover:shadow-[0_24px_80px_-20px_rgba(0,0,0,0.6)] animate-in fade-in slide-in-from-bottom-3"
-      style={{ animationDelay: '600ms', animationFillMode: 'both', animationDuration: '550ms' }}
-    >
-      <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2">
-        {/* text side */}
-        <div className="p-10 lg:p-14 flex flex-col justify-center">
-          <div className="flex items-center gap-2 mb-5">
-            <Settings className="size-4 text-violet-400" />
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-400/80">
-              Vehicle Configurator
-            </span>
-          </div>
-          <h3 className="text-3xl sm:text-4xl font-bold text-white/90 leading-tight mb-3">
-            Build Your Ride
-          </h3>
-          <p className="text-sm text-white/30 mb-8 max-w-sm leading-relaxed">
-            Choose from 9 vehicles, customize paint colors, switch between 4 studio
-            environments, and toggle post-processing effects in real-time.
-          </p>
-          <div className="flex items-center gap-2 text-sm font-medium text-blue-400 group-hover:gap-3 transition-all duration-300">
-            Launch Configurator
-            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-          </div>
-        </div>
-
-        {/* preview side */}
-        <div className="relative h-64 lg:h-auto min-h-[280px]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_50%,rgba(139,92,246,0.08),transparent_60%)]" />
-          {previewMode === '3d' && visible ? (
-            <ModelPreview
-              modelPath="/models/ford-mustang-gt/model.low.glb"
-              className="w-full h-full"
-              rotationSpeed={0.3}
-            />
-          ) : (
-            <ImagePlaceholder icon={Settings} accent="#8b5cf6" />
-          )}
-        </div>
-      </div>
-    </a>
-  )
-}

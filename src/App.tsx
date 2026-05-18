@@ -38,15 +38,14 @@ const sceneComponents = {
   'grass-shader': lazy(() => import('./scenes/grass-shader')),
   'edgesgeometry': lazy(() => import('./scenes/edgesgeometry')),
   'react-spring-animations': lazy(() => import('./scenes/react-spring-animations')),
+  'playground': lazy(() => import('./scenes/playground')),
 } as const
 
 type SceneKey = keyof typeof sceneComponents
 
-const ConfiguratorLazy = lazy(() => import('./configurator'))
-
 /* ── Hash-based routing ──────────────────────────────── */
 
-type View = 'gallery' | 'scene' | 'configurator'
+type View = 'gallery' | 'scene'
 
 interface RouteState {
   view: View
@@ -55,10 +54,12 @@ interface RouteState {
 
 function parseHash(hash: string): RouteState {
   const h = hash.replace(/^#\/?/, '')
-  if (h === 'configurator') return { view: 'configurator', activeScene: null }
   const sceneMatch = h.match(/^scene\/(.+)$/)
   if (sceneMatch && sceneMatch[1] in sceneComponents) {
     return { view: 'scene', activeScene: sceneMatch[1] as SceneKey }
+  }
+  if (h === 'playground') {
+    return { view: 'scene', activeScene: 'playground' }
   }
   return { view: 'gallery', activeScene: null }
 }
@@ -92,19 +93,6 @@ export default function App() {
         <BackButton onClick={goHome} />
         <Suspense fallback={<Spinner />}>
           <Scene />
-        </Suspense>
-      </>
-    )
-  }
-
-  /* configurator */
-  if (view === 'configurator') {
-    return (
-      <>
-        <Leva hidden />
-        <BackButton onClick={goHome} />
-        <Suspense fallback={<Spinner text="Loading configurator…" />}>
-          <ConfiguratorLazy />
         </Suspense>
       </>
     )
