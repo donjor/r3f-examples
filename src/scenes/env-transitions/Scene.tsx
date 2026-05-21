@@ -2,6 +2,7 @@ import { useState, useTransition } from 'react'
 import { useControls } from 'leva'
 import { Canvas } from '@react-three/fiber'
 import { AccumulativeShadows, RandomizedLight, Center, Environment, OrbitControls } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 
 const PRESETS = ['sunset', 'dawn', 'night', 'warehouse', 'forest', 'apartment', 'studio', 'city', 'park', 'lobby'] as const
 type PresetName = (typeof PRESETS)[number]
@@ -9,6 +10,7 @@ type PresetName = (typeof PRESETS)[number]
 export default function Scene() {
   return (
     <Canvas shadows camera={{ position: [0, 0, 4.5], fov: 50 }}>
+      <SceneStats />
       <group position={[0, -0.65, 0]}>
         <Sphere />
         <AccumulativeShadows temporal frames={200} color="purple" colorBlend={0.5} opacity={1} scale={10} alphaTest={0.85}>

@@ -10,6 +10,7 @@ import {
   Environment,
   Center,
 } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import Lenis from '@studio-freight/lenis'
 import { Soda, Apple, Duck, Candy, Flash, Target } from './Models'
 import './styles.css'
@@ -69,6 +70,7 @@ export default function ViewTracking() {
       <Canvas
         style={{ position: 'fixed', top: 0, bottom: 0, left: 0, right: 0, overflow: 'hidden', pointerEvents: 'none' }}
       >
+        <SceneStats />
         <View.Port />
         <Preload all />
       </Canvas>

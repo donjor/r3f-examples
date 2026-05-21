@@ -15,6 +15,7 @@ import {
   AccumulativeShadows,
   MeshTransmissionMaterial,
 } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 
 import shapesModel from './shapes-transformed.glb?url'
 import turtleModel from './model_52a_-_kemps_ridley_sea_turtle_no_id-transformed.glb?url'
@@ -39,6 +40,7 @@ const spheres: SphereSpec[] = [
 export default function Aquarium() {
   return (
     <Canvas shadows camera={{ position: [30, 0, -3], fov: 35, near: 1, far: 50 }} gl={{ stencil: true }}>
+      <SceneStats />
       <color attach="background" args={['#c6e5db']} />
       <AquariumGroup position={[0, 0.25, 0]}>
         <Float rotationIntensity={2} floatIntensity={10} speed={2}>

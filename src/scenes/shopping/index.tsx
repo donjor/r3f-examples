@@ -2,12 +2,14 @@ import * as THREE from 'three'
 import { easing } from 'maath'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Sky, Bvh } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { EffectComposer, Selection, Outline, N8AO, TiltShift2, ToneMapping } from '@react-three/postprocessing'
 import { Kitchen } from './Kitchen'
 
 export default function Shopping() {
   return (
     <Canvas flat dpr={[1, 1.5]} gl={{ antialias: false }} camera={{ position: [0, 1, 6], fov: 25, near: 1, far: 20 }}>
+      <SceneStats />
       <ambientLight intensity={1.5 * Math.PI} />
       <Sky />
       <Bvh firstHitOnly>

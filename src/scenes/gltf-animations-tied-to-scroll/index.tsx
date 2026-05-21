@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, useAnimations, useScroll, ScrollControls, SoftShadows } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { EffectComposer, TiltShift2 } from '@react-three/postprocessing'
 import type { ComponentPropsWithoutRef } from 'react'
 
@@ -42,6 +43,7 @@ function Model(props: ComponentPropsWithoutRef<'group'>) {
 export default function GltfAnimationsTiedToScroll() {
   return (
     <Canvas shadows gl={{ antialias: false }} camera={{ position: [1, 0.5, 2.5], fov: 50 }}>
+      <SceneStats />
       <color attach="background" args={['#f0f0f0']} />
       <fog attach="fog" args={['#f0f0f0', 0, 20]} />
       <ambientLight intensity={0.5} />

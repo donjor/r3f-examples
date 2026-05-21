@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { useRef, useState, useContext, createContext, forwardRef, useImperativeHandle, type ReactNode } from 'react'
 import { Canvas, useFrame, useThree, type ThreeElements } from '@react-three/fiber'
 import { Hud, OrbitControls, RenderTexture, OrthographicCamera, PerspectiveCamera, Text, Environment } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { suspend } from 'suspend-react'
 
 const medium = import('@pmndrs/assets/fonts/inter_medium.woff')
@@ -11,6 +12,7 @@ const HoverContext = createContext<number | false>(false)
 export default function Scene() {
   return (
     <Canvas>
+      <SceneStats />
       <ambientLight intensity={0.5 * Math.PI} />
       <Torus scale={1.75} />
       <ViewcubeHud />

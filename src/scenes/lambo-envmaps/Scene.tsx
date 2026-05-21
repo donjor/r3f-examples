@@ -1,11 +1,13 @@
 import { Canvas } from '@react-three/fiber'
 import { Environment, Lightformer, ContactShadows, OrbitControls } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { Effects } from './Effects'
 import { Lamborghini } from './Lamborghini'
 
 export default function Scene() {
   return (
     <Canvas gl={{ logarithmicDepthBuffer: true, antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 15], fov: 25 }}>
+      <SceneStats />
       <color attach="background" args={['#15151a']} />
       <Lamborghini rotation={[0, Math.PI / 1.5, 0]} scale={0.015} />
       <hemisphereLight intensity={0.5} />

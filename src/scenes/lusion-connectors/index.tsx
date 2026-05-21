@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { useRef, useReducer, useMemo, type ReactNode } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, MeshTransmissionMaterial, Environment, Lightformer } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { CuboidCollider, BallCollider, Physics, RigidBody, type RapierRigidBody } from '@react-three/rapier'
 import { EffectComposer, N8AO } from '@react-three/postprocessing'
 import { easing } from 'maath'
@@ -32,6 +33,7 @@ export default function LusionConnectors() {
       gl={{ antialias: false }}
       camera={{ position: [0, 0, 15], fov: 17.5, near: 1, far: 20 }}
     >
+      <SceneStats />
       <color attach="background" args={['#141622']} />
       <ambientLight intensity={0.4} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />

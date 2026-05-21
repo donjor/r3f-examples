@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { Suspense, useState, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Preload, useCursor } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { Model, Fragments } from './Text'
 
 function Scene() {
@@ -29,6 +30,7 @@ function Scene() {
 export default function CellFracture() {
   return (
     <Canvas dpr={[1, 2]} orthographic camera={{ zoom: 250 }}>
+      <SceneStats />
       <ambientLight />
       <Suspense fallback={null}>
         <Scene />

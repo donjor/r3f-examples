@@ -13,6 +13,7 @@ import {
   AccumulativeShadows,
   MeshTransmissionMaterial,
 } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 
 import glassModel from './glass-transformed.glb?url'
 
@@ -36,6 +37,7 @@ export default function CausticsScene() {
       dpr={[1, perfSucks ? 1.5 : 2]}
       camera={{ position: [20, 0.9, 20], fov: 26 }}
     >
+      <SceneStats />
       <PerformanceMonitor onDecline={() => degrade(true)} />
       <color attach="background" args={['#f0f0f0']} />
       <group position={[0, -0.5, 0]} rotation={[0, -0.75, 0]}>

@@ -2,6 +2,7 @@ import { Suspense, useLayoutEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { Canvas, extend, useFrame, useLoader } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 
 import fireImg from './fire.png'
 
@@ -168,6 +169,7 @@ function Fire({ color, ...props }: { color?: THREE.Color } & React.ComponentProp
 export default function ShaderFire() {
   return (
     <Canvas camera={{ position: [0, -4, 5], fov: 50 }}>
+      <SceneStats />
       <Suspense fallback={null}>
         <Fire scale={7} />
       </Suspense>

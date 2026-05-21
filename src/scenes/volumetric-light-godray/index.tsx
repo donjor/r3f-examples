@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { forwardRef, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { CubeCamera, Float, MeshReflectorMaterial } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { EffectComposer, GodRays, Bloom } from '@react-three/postprocessing'
 import { easing } from 'maath'
 
@@ -10,6 +11,7 @@ import vid10 from './10.mp4'
 export default function VolumetricLightGodray() {
   return (
     <Canvas camera={{ position: [0, 0, 30], fov: 35, near: 1, far: 60 }} gl={{ antialias: false }}>
+      <SceneStats />
       <color attach="background" args={['#050505']} />
       <ambientLight />
       <Screen />

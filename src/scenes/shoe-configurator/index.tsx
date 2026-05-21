@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { useRef, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, ContactShadows, Environment, OrbitControls } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { HexColorPicker } from 'react-colorful'
 import { proxy, useSnapshot } from 'valtio'
 
@@ -21,6 +22,7 @@ export default function ShoeConfigurator() {
   return (
     <>
       <Canvas shadows camera={{ position: [0, 0, 4], fov: 45 }}>
+        <SceneStats />
         <ambientLight intensity={0.7} />
         <spotLight intensity={0.5} angle={0.1} penumbra={1} position={[10, 15, 10]} castShadow />
         <Shoe />

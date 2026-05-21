@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, Suspense, type Dispatch, type SetStat
 import * as THREE from 'three'
 import { Canvas } from '@react-three/fiber'
 import { useGLTF, useTexture, Shadow, meshBounds } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { a as aRaw } from '@react-spring/three'
 const a = aRaw as any
 
@@ -61,6 +62,7 @@ export function Scene({ x, set }: { x: X; set: Dispatch<SetStateAction<number>> 
   const color = x.to([0, 1], ['#7fffd4', '#c72f46'])
   return (
     <Canvas orthographic shadows dpr={[1, 2]} camera={{ zoom: 60, position: [-10, 10, 10], fov: 35 }}>
+      <SceneStats />
       <ambientLight intensity={0.1} />
       <directionalLight position={[-20, 20, 20]} intensity={1} />
       <a.directionalLight position={[-20, -20, -20]} intensity={0.5} color={color} />

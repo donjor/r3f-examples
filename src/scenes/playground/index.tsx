@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Center } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { usePlaygroundStore } from './store'
 import { vehicleById, GROUND_Y } from './vehicles/registry'
 import { environmentById } from './environments/registry'
@@ -34,6 +35,7 @@ export default function Playground() {
         dpr={[1, 1.5]}
         camera={{ position: environment.camera.position, fov: environment.camera.fov }}
       >
+        <SceneStats />
         <Suspense fallback={null}>
           <group position={[0, GROUND_Y, 0]}>
             <Center key={vehicle.id} bottom disableX disableZ>

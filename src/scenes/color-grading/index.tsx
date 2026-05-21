@@ -1,5 +1,6 @@
 import { Canvas, extend, useLoader } from '@react-three/fiber'
 import { OrbitControls, Environment, Effects, useTexture } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { LUTPass, LUTCubeLoader } from 'three-stdlib'
 
 import cubicleTex from './cubicle-99.cube?url'
@@ -30,6 +31,7 @@ function Sphere(props: React.ComponentProps<'mesh'>) {
 export default function ColorGrading() {
   return (
     <Canvas frameloop="demand" camera={{ position: [0, 0, 5], fov: 45 }}>
+      <SceneStats />
       <ambientLight />
       <spotLight intensity={0.5} angle={0.2} penumbra={1} position={[5, 15, 10]} />
       <Sphere />

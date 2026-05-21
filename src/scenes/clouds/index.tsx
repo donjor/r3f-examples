@@ -1,13 +1,14 @@
 import * as THREE from 'three'
 import { useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Clouds, Cloud, CameraControls, Sky as SkyImpl, StatsGl } from '@react-three/drei'
+import { Clouds, Cloud, CameraControls, Sky as SkyImpl} from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { useControls } from 'leva'
 
 export default function CloudsScene() {
   return (
     <Canvas camera={{ position: [0, -10, 10], fov: 75 }}>
-      <StatsGl />
+      <SceneStats />
       <Sky />
       <ambientLight intensity={Math.PI / 1.5} />
       <spotLight position={[0, 40, 0]} decay={0} distance={45} penumbra={1} intensity={100} />

@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { useEffect, useRef, useState, createContext, useContext } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useCursor, MeshReflectorMaterial, Image, Text, Environment } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { easing } from 'maath'
 import getUuid from 'uuid-by-string'
 
@@ -32,6 +33,7 @@ export default function ImageGallery() {
   return (
     <ActiveCtx.Provider value={{ activeId, setActiveId }}>
       <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
+        <SceneStats />
         <color attach="background" args={['#191920']} />
         <fog attach="fog" args={['#191920', 0, 15]} />
         <group position={[0, -0.5, 0]}>

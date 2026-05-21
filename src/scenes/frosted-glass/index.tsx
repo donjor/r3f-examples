@@ -2,6 +2,7 @@ import { useRef, type ComponentPropsWithoutRef } from 'react'
 import * as THREE from 'three'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, MeshTransmissionMaterial, ContactShadows, Environment } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { easing } from 'maath'
 import { useStore, setOpen } from './store'
 import { Overlay } from './Overlay'
@@ -12,6 +13,7 @@ export default function FrostedGlass() {
   return (
     <>
       <Canvas camera={{ position: [0, 0, 4], fov: 40 }}>
+        <SceneStats />
         <ambientLight intensity={0.7} />
         <spotLight intensity={0.5} angle={0.1} penumbra={1} position={[10, 15, -5]} castShadow />
         <Environment preset="city" background blur={1} />

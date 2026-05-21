@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { useRef, type ReactNode } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, useTexture, AccumulativeShadows, RandomizedLight, Decal, Environment, Center } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { easing } from 'maath'
 import { useSnapshot } from 'valtio'
 import { state } from './store'
@@ -17,6 +18,7 @@ export default function TShirtConfigurator() {
         camera={{ position: [0, 0, 2.5], fov: 25 }}
         gl={{ preserveDrawingBuffer: true }}
       >
+        <SceneStats />
         <ambientLight intensity={0.5} />
         <Environment files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/potsdamer_platz_1k.hdr" />
         <CameraRig>

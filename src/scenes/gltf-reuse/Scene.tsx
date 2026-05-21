@@ -2,10 +2,12 @@ import type React from 'react'
 import * as THREE from 'three'
 import { Canvas } from '@react-three/fiber'
 import { useGLTF, AccumulativeShadows, RandomizedLight, Environment, CameraControls } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 
 export default function Scene() {
   return (
     <Canvas shadows camera={{ position: [5, 0, 5], fov: 35 }}>
+      <SceneStats />
       <ambientLight intensity={Math.PI} />
       <Shoe position={[0, 0, 0.85]} />
       <Shoe position={[0, 0, -0.85]} rotation={[0, 0.5, Math.PI]} scale={-1} />

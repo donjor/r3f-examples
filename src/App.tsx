@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState, useCallback, useSyncExternalStore } from 'react'
 import { Leva } from 'leva'
-import { ArrowLeft } from 'lucide-react'
 import Gallery from '@/components/Gallery'
+import { SceneHeader } from '@/components/scene-header'
 
 /* ── Lazy-loaded scene components ────────────────────── */
 
@@ -89,8 +89,8 @@ export default function App() {
     const Scene = sceneComponents[activeScene]
     return (
       <>
-        <Leva collapsed />
-        <BackButton onClick={goHome} />
+        <Leva neverHide collapsed titleBar={{ title: 'Controls', filter: false }} />
+        <SceneHeader onBack={goHome} />
         <Suspense fallback={<Spinner />}>
           <Scene />
         </Suspense>
@@ -107,20 +107,6 @@ export default function App() {
         onPreviewModeChange={setPreviewMode}
       />
     </>
-  )
-}
-
-/* ── Back button ─────────────────────────────────────── */
-
-function BackButton({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="fixed top-4 left-4 z-[1000] flex items-center gap-2 pl-3.5 pr-4 py-2 rounded-full bg-black/50 backdrop-blur-2xl border border-white/[0.08] text-[13px] font-medium text-white/70 hover:bg-black/70 hover:text-white transition-all duration-200"
-    >
-      <ArrowLeft className="size-3.5" />
-      Back
-    </button>
   )
 }
 

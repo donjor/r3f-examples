@@ -13,6 +13,7 @@ import {
   Float,
   Environment,
 } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { EffectComposer, TiltShift2, HueSaturation, DotScreen } from '@react-three/postprocessing'
 import { useControls } from 'leva'
 import * as CURVES from './curves'
@@ -35,6 +36,7 @@ export default function MotionPathControlsScene() {
   const Curve = CURVES[path as CurveKey]
   return (
     <Canvas camera={{ position: [10, 15, -10], fov: 45 }}>
+      <SceneStats />
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
       {!attachCamera && <OrbitControls />}

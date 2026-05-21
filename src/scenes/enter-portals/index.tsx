@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { useEffect, useRef, useState, createContext, useContext, type ReactNode } from 'react'
 import { Canvas, extend, useFrame, useThree, type ThreeElements } from '@react-three/fiber'
 import { useCursor, MeshPortalMaterial, CameraControls, Gltf, Text, Preload } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { easing, geometry } from 'maath'
 
 import model01 from './art_01.glb?url'
@@ -22,6 +23,7 @@ export default function EnterPortals() {
   return (
     <RouteCtx.Provider value={{ activeId, setActiveId }}>
       <Canvas camera={{ fov: 75, position: [0, 0, 20] }}>
+        <SceneStats />
         <color attach="background" args={['#f0f0f0']} />
         <Frame slug="01" label={`art\n01`} author="Omar Faruq Tawsif" bg="#e4cdac" position={[-1.15, 0, 0]} rotation={[0, 0.5, 0]}>
           <Gltf src={model01} scale={8} position={[0, -0.7, -2]} />

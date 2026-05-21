@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Environment, useGLTF, ContactShadows } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { useSpring } from '@react-spring/core'
 import { a as three } from '@react-spring/three'
 import { a as web } from '@react-spring/web'
@@ -81,6 +82,7 @@ export default function FloatingLaptop() {
         click
       </web.h1>
       <Canvas dpr={[1, 2]} camera={{ position: [0, 0, -30], fov: 35 }}>
+        <SceneStats />
         <three.pointLight
           position={[10, 10, 10]}
           intensity={1.5}

@@ -153,6 +153,30 @@ body::after {
   box-shadow: 0 0 30px oklch(0.65 0.2 250 / 20%);
 }
 
+/* ── Scene header: StatsGl host ──────────────────────── */
+.scene-stats-host {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px;
+  overflow: hidden;
+}
+.scene-stats-host:empty {
+  display: none;
+}
+.scene-stats-panel {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+}
+.scene-stats-panel canvas {
+  display: block;
+  border-radius: 4px;
+}
+
 /* ── Gradient text helper ────────────────────────────── */
 .text-gradient {
   background-clip: text;

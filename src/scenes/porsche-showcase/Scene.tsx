@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { useLayoutEffect, useRef, useState, useMemo, useCallback, createContext, useContext } from 'react'
 import { Canvas, applyProps, useFrame } from '@react-three/fiber'
 import { PerformanceMonitor, Environment, Lightformer, Float, useGLTF, OrbitControls } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 
 type CameraMode = 'showcase' | 'freeform'
 
@@ -35,6 +36,7 @@ export default function Scene() {
   return (
     <>
       <Canvas shadows camera={{ position: [5, 0, 15], fov: 30 }}>
+        <SceneStats />
         <ColorRefContext.Provider value={colorRef}>
           <spotLight position={[0, 15, 0]} angle={0.3} penumbra={1} castShadow intensity={2} shadow-bias={-0.0001} />
           <ambientLight intensity={0.5} />

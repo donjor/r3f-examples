@@ -1,11 +1,13 @@
 import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Sky, OrbitControls } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import Grass from './Grass'
 
 export default function GrassShader() {
   return (
     <Canvas camera={{ position: [15, 15, 10] }}>
+      <SceneStats />
       <Sky azimuth={1} inclination={0.6} distance={1000} />
       <ambientLight />
       <pointLight position={[10, 10, 10]} />

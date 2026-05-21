@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { Suspense, useMemo, useRef, type ComponentProps } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, useScroll, ScrollControls, Environment, Merged, Text, MeshReflectorMaterial } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 
 import cabinModel from './cabin-transformed.glb?url'
 import seatModel from './seat-transformed.glb?url'
@@ -82,6 +83,7 @@ function Cabin({
 export default function NightTrain() {
   return (
     <Canvas dpr={[1, 1.5]} shadows camera={{ position: [-15, 15, 18], fov: 35 }} gl={{ alpha: false }}>
+      <SceneStats />
       <fog attach="fog" args={['#17171b', 30, 40]} />
       <color attach="background" args={['#17171b']} />
       <ambientLight intensity={0.25} />

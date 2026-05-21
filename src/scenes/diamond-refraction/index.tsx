@@ -12,6 +12,7 @@ import {
   MeshRefractionMaterial,
   MeshTransmissionMaterial,
 } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { useControls } from 'leva'
 import { RGBELoader } from 'three-stdlib'
@@ -57,6 +58,7 @@ function Diamond(props: React.ComponentProps<'mesh'>) {
 export default function DiamondRefraction() {
   return (
     <Canvas shadows camera={{ position: [-5, 0.5, 5], fov: 45 }}>
+      <SceneStats />
       <color attach="background" args={['#f0f0f0']} />
       <ambientLight intensity={0.5 * Math.PI} />
       <spotLight decay={0} position={[5, 5, -10]} angle={0.15} penumbra={1} />

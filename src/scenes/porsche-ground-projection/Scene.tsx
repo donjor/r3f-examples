@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useControls } from 'leva'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Fisheye, Environment, ContactShadows, OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { SceneStats } from '@/components/scene-stats'
 import Car from './Car'
 import { Perf } from 'r3f-perf'
 
@@ -13,6 +14,7 @@ export default function Scene() {
   })
   return (
     <Canvas>
+      <SceneStats />
       <Fisheye resolution={768} zoom={0.25}>
         <Environment files="/old_depot_2k.hdr" ground={{ height: 35, radius: 100, scale: 200 }} />
         <Car position={[-8, 0, -2]} scale={20} rotation-y={-Math.PI / 4} />
